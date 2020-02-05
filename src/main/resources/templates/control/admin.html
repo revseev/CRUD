@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}" media="screen"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+    <title>Admin Panel</title>
+    <script src="../../static/js/script.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Project name</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar nav-pills">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="admin.html">
+                                Admin panel <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{'/user/' + ${user.getLogin()}}">
+                                User
+                            </a>
+
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div class="chartjs-size-monitor"
+                    style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                    <div class="chartjs-size-monitor-expand"
+                        style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                        <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+                    </div>
+                    <div class="chartjs-size-monitor-shrink"
+                        style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                        <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+                    </div>
+                </div>
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Admin Panel</h1>
+                </div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab"
+                            aria-controls="users" aria-selected="true">Users table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="newuser-tab" data-toggle="tab" href="#newuser" role="tab"
+                            aria-controls="newuser" aria-selected="false">New user</a>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                        <div class="bg-secondary text-white">All users</div>
+                        <table class="table">
+                            <tr>
+                                <th>id</th>
+                                <th>login</th>
+                                <th>email</th>
+                                <th>password</th>
+                                <th>role</th>
+                                <th>edit</th>
+                            </tr>
+                            <th:block th:each="user : ${userList}">
+                            <tr>
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.login}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.password}"></td>
+                                <td>
+                                    <th:block th:each="role : ${user.roles}">
+                                        <div th:text="${role.getRole()}"></div>
+                                    </th:block>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            th:attr="data-target='#exampleModal' + ${user.id}">Edit</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" th:attr="id='exampleModal' + ${user.id}" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body container-fluid d-flex justify-content-center">
+                                                    <div class="col-6">
+                                                        <form class="d-flex flex-column" th:action="@{/control/edit}" th:object="${user}" th:attr="id='edit_form' + ${user.id}" method="POST">
+                                                            <input class="form-control" id="disabledInput" name="id" th:value="${user.id}" type="text"
+                                                                   placeholder="" hidden>
+                                                            <label for="disabledInput" class="font-weight-bold text-center">ID
+                                                                <input class="form-control" id="disabledInput" name="id" th:value="${user.id}" type="text"
+                                                                       placeholder="" disabled></label>
+
+                                                            <label for="Login" class="font-weight-bold text-center">Login
+                                                                <input type="text" class="form-control" name="login" th:value="${user.login}" id="Login"></label>
+
+                                                            <label for="Email" class="font-weight-bold text-center">Email
+                                                                <input type="text" class="form-control" name="email" th:value="${user.email}" id="Email"></label>
+
+
+                                                            <label for="Password" class="font-weight-bold text-center">Password
+                                                                <input type="password" class="form-control" name="password" th:value="${user.password}" id="Password"></label>
+
+                                                            <label for="Role" class="font-weight-bold text-center">Role
+                                                                <input type="text" class="form-control" name="role" th:value="${user.roles.get(0).role}" id="Role"></label>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Закрыть</button>
+                                                    <button type="submit" th:attr="form='edit_form' + ${user.id}" class="btn btn-primary">Сохранить</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </th:block>
+                        </table>
+
+                    </div>
+                    <div class="tab-pane" id="newuser" role="tabpanel" aria-labelledby="newuser-tab">
+                        <div class="bg-secondary text-white">New user</div>
+                        <div class="modal-body container-fluid d-flex justify-content-center">
+                            <form class="d-flex flex-column col-4" method="post" th:action="@{/control/add}" th:object="${user}">
+
+                                <label for="newLogin" class="font-weight-bold text-center">Login
+                                    <input type="text" class="form-control" name="login" id="newLogin"></label>
+
+                                <label for="newEmail" class="font-weight-bold text-center">Email
+                                    <input type="text" class="form-control" name="email" id="newEmail"></label>
+
+                                <label for="newPassword" class="font-weight-bold text-center">Password
+                                    <input type="password" class="form-control" name="password" id="newPassword"></label>
+
+                                <label for="newRole" class="font-weight-bold text-center">Role
+                                    <input type="text" class="form-control" name="role" id="newRole"></label>
+                                <button type="submit" class="btn btn-success">Add new user</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>
