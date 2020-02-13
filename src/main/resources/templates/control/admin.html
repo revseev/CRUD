@@ -16,7 +16,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
     </script>
+    <script type="application/javascript" th:src="@{/js/script.js}"></script>
     <title>Admin Panel</title>
+
 </head>
 
 <body>
@@ -104,7 +106,7 @@
                                     </div>
                                     <div class="modal-body container-fluid d-flex justify-content-center">
                                         <div class="col-6">
-                                            <form class="d-flex flex-column" action="/api/edit/" id="edit_form" method="POST">
+                                            <form class="d-flex flex-column" id="edit_form" >
                                                 <input class="form-control" id="Id" name="id" value="" type="text" hidden>
                                                 <label for="disabledInput" class="font-weight-bold text-center">ID
                                                     <input class="form-control" name="id" value="" id="Id" type="text"
@@ -120,15 +122,17 @@
                                                 <label for="Password" class="font-weight-bold text-center">Password
                                                     <input type="password" class="form-control" name="password" value="" id="Password"></label>
 
-                                                <label for="Role" class="font-weight-bold text-center">Role
-                                                    <input type="text" class="form-control" name="role" value="" id="Role"></label>
+                                                <label id="EditRole" class="font-weight-bold text-center">Roles<br>
+
+                                                </label>
+
                                             </form>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Закрыть</button>
-                                        <button type="submit" form="edit_form" class="btn btn-primary">Сохранить</button>
+                                        <button type="submit" form="edit_form" id="saveUser" class="btn btn-primary">Сохранить</button>
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +142,7 @@
                     <div class="tab-pane" id="newuser" role="tabpanel" aria-labelledby="newuser-tab">
                         <div class="bg-secondary text-white">New user</div>
                         <div class="modal-body container-fluid d-flex justify-content-center">
-                            <form class="d-flex flex-column col-4" method="post" action="/api/add">
+                            <form class="d-flex flex-column col-4" id="new_user">
 
                                 <label for="newLogin" class="font-weight-bold text-center">Login
                                     <input type="text" class="form-control" name="login" id="newLogin"></label>
@@ -149,8 +153,10 @@
                                 <label for="newPassword" class="font-weight-bold text-center">Password
                                     <input type="password" class="form-control" name="password" id="newPassword"></label>
 
-                                <label for="newRole" class="font-weight-bold text-center">Role
-                                    <input type="text" class="form-control" name="role" id="newRole"></label>
+                                <label id="NewRole" class="font-weight-bold text-center">Roles<br>
+
+                                </label>
+
                                 <button type="submit" class="btn btn-success">Add new user</button>
                             </form>
                         </div>
@@ -159,74 +165,7 @@
             </main>
         </div>
     </div>
-<script>
-    let id;
-    let login;
-    let email;
-    let password;
-    let role;
-    let button;
-    let url = 'http://localhost:8080/api/all';
-    let srole;
 
-    fetch(url)
-        .then(function (response) {
-            return response.json()
-        })
-        .then(function (json) {
-                console.log(json);
-            for (let i in json) {
-                id = json[i].id;
-                login = json[i].login;
-                email = json[i].email;
-                password = json[i].password;
-                role = json[i].roles[0]['role'];
-                button = '<button type="button" class="btn btn-primary" id="' + id + '">Edit</button>';
-
-                let row = "<tr>" +
-                    "<td>" + id + "</td>" +
-                    "<td>" + login + "</td>" +
-                    "<td>" + email + "</td>" +
-                    "<td>" + password + "</td>" +
-                    "<td>" + role + "</td>" +
-                    "<td>" + button + "</td>" +
-                    "</tr>";
-                $('#mytable').append(row);
-
-            }
-
-            $("button").on('click', function() {
-                let i = $(this).attr('id');
-
-                fetch(url)
-                    .then(function (response) {
-                        return response.json()
-                    })
-                    .then(function (json) {
-                        for (let a in json) {
-                            if (json[a].id == i) {
-                                id = json[a].id;
-                                login = json[a].login;
-                                email = json[a].email;
-                                password = json[a].password;
-                                srole = json[a].roles[0]['role'];
-                                break;
-                            }
-                        }
-
-                        $('form #Id').val(id);
-                        $('#Login').val(login);
-                        $('#Email').val(email);
-                        $('#Password').val(password);
-                        $('#Role').val(srole);
-                        $('#exampleModal').modal('show');
-                    })
-            });
-
- })
-
-
-    </script>
 </body>
 
 </html>

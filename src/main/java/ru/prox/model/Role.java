@@ -1,20 +1,13 @@
 package ru.prox.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "roles")
 public class Role implements GrantedAuthority {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "role_id", unique = false)
     private Long id;
-
-    @Column(name = "role")
     private String role;
 
     public Role() {
@@ -46,6 +39,7 @@ public class Role implements GrantedAuthority {
     }
 
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return getRole();
     }
