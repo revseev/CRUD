@@ -1,6 +1,5 @@
 package ru.prox.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -9,12 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import ru.prox.model.Role;
 import ru.prox.model.User;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class AdminController {
@@ -22,10 +16,6 @@ public class AdminController {
 
     RestTemplate restTemplate = new RestTemplateBuilder().basicAuthentication("admin","admin").build();
     HttpHeaders headers = new HttpHeaders();
-
-    User user;
-    List<Role> roles = new ArrayList<>();
-    Role role = null;
 
     @GetMapping("/control/admin")
     public ModelAndView allUsers() {
