@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers(HttpMethod.GET,"/static/**", "/css/**", "/api/**").antMatchers(HttpMethod.POST, "/api/**");
+                .antMatchers(HttpMethod.GET,"/static/**", "/css/**", "/rest/**").antMatchers(HttpMethod.POST, "/rest/**");
     }
 
     @Bean

@@ -23,7 +23,7 @@ public class AdminController {
         String authUserName = auth.getName();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Object> requestEntity = new HttpEntity<>(authUserName,headers);
-        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8081/api/getUser", HttpMethod.POST, requestEntity, User.class);
+        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8081/rest/getUser", HttpMethod.POST, requestEntity, User.class);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("control/admin");
         modelAndView.addObject("user", response.getBody());

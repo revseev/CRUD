@@ -4,7 +4,7 @@ let email;
 let password;
 let role;
 let button;
-let url = 'http://localhost:8080/api/all';
+let url = 'http://localhost:8080/rest/all';
 let allRoles = [];
 let roles = [];
 let userRoles = [];
@@ -62,7 +62,7 @@ fetch(url)
                             break;
                         }
                     }
-                    fetch('http://localhost:8080/api/getroles')
+                    fetch('http://localhost:8080/rest/getroles')
                         .then(function (response) {
                             return response.json()
                         })
@@ -108,7 +108,7 @@ fetch(url)
             });
 
             console.log(rolesToServer);
-            fetch('http://localhost:8080/api/edit',{
+            fetch('http://localhost:8080/rest/edit',{
                 method: "POST",
                 headers: {
                     Accept: 'application/json',
@@ -140,7 +140,7 @@ fetch(url)
                 rolesToServer.push({"id": id, "role": role});
             });
 
-            fetch('http://localhost:8080/api/add',{
+            fetch('http://localhost:8080/rest/add',{
                 method: "POST",
                 headers: {
                     Accept: 'application/json',
@@ -160,7 +160,7 @@ fetch(url)
         });
 
 
-        fetch('http://localhost:8080/api/getroles')
+        fetch('http://localhost:8080/rest/getroles')
             .then(function (response) {
                 return response.json()
             })

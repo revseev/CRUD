@@ -18,22 +18,18 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-
-    HttpHeaders headers = new HttpHeaders();
-
-    RestTemplate restTemplate = new RestTemplateBuilder().basicAuthentication("admin","admin").build();
+    @Autowired
+    RestService restService;
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> requestEntity = new HttpEntity<>(login,headers);
-        ResponseEntity<User> response = restTemplate.exchange("http://localhost:8081/api/getUser", HttpMethod.POST, requestEntity, User.class);
-        if (response.getBody() == null){
+        User user = restService.getUserByLogin(login);
+        if (user == null){
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return new org.springframework.security.core.userdetails.User(response.getBody().getLogin(),
-                response.getBody().getPassword(),
-                mapRolesToAuthorities(response.getBody().getRoles()));
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles){
