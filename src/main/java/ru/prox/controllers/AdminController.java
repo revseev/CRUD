@@ -27,6 +27,7 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("control/admin");
         modelAndView.addObject("user", response.getBody());
+
         return modelAndView;
     }
 

@@ -1,7 +1,11 @@
 package ru.prox.config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.formLogin()
                 // указываем страницу с формой логина
                 .loginPage("/index")
@@ -39,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("login")
                 .passwordParameter("password")
                 // даем доступ к форме логина всем
-                .permitAll();
+                .permitAll().and().exceptionHandling().accessDeniedPage("/access-denied");
 
         http.logout()
                 // разрешаем делать логаут всем
@@ -55,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
-                .antMatchers("/index").anonymous()
+                .antMatchers("/index", "/", "/google/auth").permitAll()
                 // защищенные URL
                 .antMatchers("/control/**").hasRole("ADMIN")
                 .antMatchers("/user").hasRole("USER")
@@ -63,11 +68,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers(HttpMethod.GET,"/static/**", "/css/**", "/rest/**").antMatchers(HttpMethod.POST, "/rest/**");
+                .antMatchers(HttpMethod.GET,"/static/**", "/css/**", "/rest/**", "/callback").antMatchers(HttpMethod.POST, "/rest/**");
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

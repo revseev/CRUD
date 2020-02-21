@@ -14,4 +14,5 @@ public class UserController {
     public String user() {
         return "user";
     }
+
 }
